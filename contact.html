@@ -30,26 +30,24 @@ main{ display:grid; gap:2.2rem; }
 main p{ max-width:var(--measure); margin:0; }
 main p + p{ margin-top:1em; }
 h1{ font-weight:400; font-size:1.35em; margin:0; max-width:var(--measure); text-wrap:balance; line-height:1.3; }
-h2{ font-weight:400; font-size:0.78em; letter-spacing:0.08em; text-transform:uppercase; color:var(--mute); margin:0 0 0.6rem; }
-figure{ margin:0; }
-figure img{ display:block; width:100%; height:auto; max-width:100%; }
-figcaption{ font-size:0.78em; color:var(--mute); margin-top:0.6rem; }
-.lines{ max-width:var(--measure); }
-.lines p{ margin:0; }
-.doors{ margin-top:3.5rem; max-width:var(--measure); display:grid; gap:0.5rem; font-size:0.95em; }
-.doors p{ margin:0; }
-.cv{ display:grid; gap:1.6rem; font-size:0.86em; line-height:1.5; max-width:40rem; border-top:1px solid var(--rule); padding-top:1.8rem; margin-top:0.5rem; }
-.cv ul{ list-style:none; margin:0; padding:0; }
-.cv li{ margin:0 0 0.3em; }
-.cv li + li{ margin-top:0.3em; }
-.year{ display:inline-block; min-width:3.2em; color:var(--mute); font-variant-numeric:tabular-nums; }
-.sub{ color:var(--mute); }
-.gallery{ display:grid; gap:1.4rem; grid-template-columns:1fr; }
-.portrait{ max-width:22rem; }
-.gallery figure{ min-width:0; }
 footer{ margin-top:5rem; font-size:0.78em; color:var(--mute); }
-.email{ font-size:1.1em; user-select:all; }
-@media (prefers-reduced-motion:no-preference){ a{ transition:text-decoration-color .15s; } }
+
+/* Contact form: same column, same type, the lightest possible chrome. */
+form.contact{ max-width:var(--measure); display:grid; gap:1.4rem; margin-top:0.4rem; }
+form.contact label{ display:grid; gap:0.35rem; font-size:0.86em; color:var(--mute); }
+form.contact input, form.contact textarea{
+  font:inherit; font-size:1.2rem; color:var(--fg); background:transparent;
+  border:0; border-bottom:1px solid var(--rule); border-radius:0; padding:0.3em 0; width:100%; box-sizing:border-box; }
+form.contact textarea{ min-height:7.5em; resize:vertical; line-height:1.5; }
+form.contact input:focus, form.contact textarea:focus{ outline:none; border-bottom-color:var(--fg); }
+form.contact button{
+  font:inherit; font-size:1rem; color:var(--fg); background:transparent; cursor:pointer;
+  border:1px solid var(--fg); border-radius:0; padding:0.45em 1.3em; justify-self:start; margin-top:0.4rem; }
+form.contact button:hover, form.contact button:focus-visible{ background:var(--fg); color:var(--bg); outline:none; }
+form.contact button[disabled]{ opacity:0.5; cursor:default; }
+form.contact .hp{ display:none !important; }
+.note{ font-size:0.86em; color:var(--mute); max-width:var(--measure); }
+@media (prefers-reduced-motion:no-preference){ a, form.contact button{ transition:all .15s; } }
 </style>
 
 </head>
@@ -60,9 +58,45 @@ footer{ margin-top:5rem; font-size:0.78em; color:var(--mute); }
 <h1>Contact</h1>
 <div>
 <p>I'd be glad to hear from you about my work, the museum, the films, or a possible collaboration.</p>
-<p><span class="email" id="email" data-u="emma" data-d="ecbalazs.com"></span></p>
 </div>
-<script>(function(){var e=document.getElementById('email');var a=e.getAttribute('data-u')+'@'+e.getAttribute('data-d');var l=document.createElement('a');l.href='mailto:'+a;l.textContent=a;e.appendChild(l);})();</script>
+
+<!-- FORMSPREE: replace YOUR_FORM_ID below with the id Formspree gives you (the part after /f/). -->
+<form class="contact" id="contact-form" action="https://formspree.io/f/mqpenror" method="POST">
+  <label>Name
+    <input type="text" name="name" autocomplete="name" required>
+  </label>
+  <label>Email
+    <input type="email" name="email" autocomplete="email" required>
+  </label>
+  <label>Message
+    <textarea name="message" required></textarea>
+  </label>
+  <input type="hidden" name="_subject" value="Message from ecbalazs.com">
+  <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button type="submit">Send</button>
+</form>
+<p class="note" id="form-note" hidden></p>
+
+<script>
+(function(){
+  var f=document.getElementById('contact-form'), n=document.getElementById('form-note');
+  if(!f||!window.fetch) return; /* without fetch, the form posts the ordinary way */
+  f.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true; b.textContent='Sending…';
+    fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}})
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
+    .then(function(){
+      f.hidden=true; n.hidden=false;
+      n.textContent='Thank you. Your message has been sent, and I will reply as soon as I can.';
+    })
+    .catch(function(){
+      b.disabled=false; b.textContent='Send'; n.hidden=false;
+      n.textContent='Something went wrong and the message was not sent. Please try again in a moment.';
+    });
+  });
+})();
+</script>
 </main>
 <footer>© E.C.Balázs</footer>
 </div>
