@@ -1,5 +1,27 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>E.C.Balázs</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap">
-<style>body{margin:0;padding:2rem 16px;background:#fff;color:#111;font-family:"EB Garamond",Georgia,serif;font-size:1.2rem;line-height:1.5}a{color:#111}</style></head>
-<body><p>That page isn't here.</p><p><a href="/">E.C.Balázs</a></p></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E.C.Balázs</title>
+<meta name="robots" content="noindex">
+<!-- No "page not found" message on this site. Any old or mistyped address
+     forwards quietly to the closest page, or to the home page. -->
+<script>
+(function(){
+  var p = location.pathname.toLowerCase().replace(/^\/+|\/+$/g, "").replace(/\.html?$/, "");
+  var first = p.split("/")[0];
+  var exact = { "": "/", "index": "/", "home": "/",
+    "about": "/about.html", "about-me": "/about.html", "about-1": "/about.html", "bio": "/about.html", "cv": "/about.html", "resume": "/about.html",
+    "museum": "/museum.html", "prince": "/museum.html",
+    "film": "/film.html", "films": "/film.html", "work": "/film.html",
+    "consulting": "/consulting.html", "services": "/consulting.html",
+    "contact": "/contact.html", "contact-me": "/contact.html" };
+  var near = [ ["about","/about.html"], ["bio","/about.html"], ["museum","/museum.html"], ["prince","/museum.html"],
+    ["film","/film.html"], ["dearly","/film.html"], ["beloved","/film.html"], ["consult","/consulting.html"],
+    ["curat","/consulting.html"], ["service","/consulting.html"], ["contact","/contact.html"] ];
+  var to = exact[first];
+  if (!to) { for (var i = 0; i < near.length; i++) { if (p.indexOf(near[i][0]) > -1) { to = near[i][1]; break; } } }
+  location.replace(to || "/");
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
+<style>html,body{margin:0;background:#fff}</style>
+</head><body></body></html>
